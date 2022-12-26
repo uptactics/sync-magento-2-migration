@@ -278,7 +278,11 @@ class InsertOnDuplicate extends InsertMultiple
             $this->resolvedParams = array_slice($this->resolvedParams, $paramCount);
             $this->resolvedCount -= $limit;
             $adapter->getDriver()->createStatement('SET FOREIGN_KEY_CHECKS=0')->execute();
-            $this->limitStatement($limit, $adapter)->execute($parameters);
+            try {
+                $this->limitStatement($limit, $adapter)->execute($parameters);
+            } catch (\Exception $e) {
+                echo ".";
+            }
             $adapter->getDriver()->createStatement('SET FOREIGN_KEY_CHECKS=1')->execute();
         }
     }
